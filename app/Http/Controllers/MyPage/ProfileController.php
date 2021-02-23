@@ -26,8 +26,12 @@ class ProfileController extends Controller
         $user->name = $request->input('name');
 
         if ($request->has('avatar')) {
-            $fileName = $this->saveAvatar($request->file('avatar'));
-            $user->avatar_file_name = $fileName;
+
+            $file_name = $request->file('avatar')->getClientOriginalName();
+
+            Storage::putFileAs('public/avatars', $request->file('avatar'), $file_name);
+
+            $user->avatar_file_name = $file_name;
         }
 
         $user->save();
