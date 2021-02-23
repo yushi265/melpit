@@ -35,14 +35,10 @@ class SellController extends Controller
     {
         $user = Auth::user();
 
-        // $imageName = $this->saveImage($request->file('item-image'));
-
-        $file_name = $request->file('item-image')->getClientOriginalName();
-
-        Storage::putFileAs('public/item-images', $request->file('item-image'), $file_name);
+        $file_name = Storage::putFile('public/item-images', $request->file('item-image'));
 
         $item = new Item();
-        $item->image_file_name = $file_name;
+        $item->image_file_name = basename($file_name);
         $item->seller_id = $user->id;
         $item->name = $request->input('name');
         $item->description = $request->input('description');
